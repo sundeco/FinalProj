@@ -29,16 +29,14 @@ public class chess {
                 {2,0,0,0,0,0,0,0},
                 {0,0,0,0,0,0,0,0},
             };
-        //board = starting;
-        int gameState = 2; //0=opening, 1=midgame, 2=endgame
+        board = starting;
+        int gameState = 1; //0=opening, 1=midgame, 2=endgame
         printBoard(board);
         String firstMove = "";
         for(int i = 5; i < 18; i++) {
             firstMove = testAI(board, i, gameState, -10000000, 10000000, firstMove);
             System.out.println(testAI(board, i, gameState, -10000000, 10000000, firstMove));
         }
-        //System.out.println(testAI(board, 5, gameState));
-        //System.out.println(minimax(board, 5, true, gameState));
     }
 
     public static String testAI(int[][] board, int depth, int gameState, double alpha, double beta, String firstMove) {
@@ -52,521 +50,7 @@ public class chess {
             moves.add(Integer.parseInt(firstMove.substring(2,3)));
             moves.add(Integer.parseInt(firstMove.substring(11,12)));
         }
-        for(int i = 0; i <  8; i++) {
-            for(int j = 0; j < 8; j++) {
-                if(board[i][j] <= 0) {
-                    continue;
-                }
-                int x = board[i][j];
-                //have each piece make their move, dostuff, then undo the move
-                if(x == 1) {
-                    if(j != 7) {
-                        moves.add(i);
-                        moves.add(j+1);
-                        moves.add(i);
-                        moves.add(j);
-                        moves.add(x);
-                    }
-                    if(i != 7) {
-                        moves.add(i+1);
-                        moves.add(j);
-                        moves.add(i);
-                        moves.add(j);
-                        moves.add(x);
-                    }
-                    if(j != 0) {
-                        moves.add(i);
-                        moves.add(j-1);
-                        moves.add(i);
-                        moves.add(j);
-                        moves.add(x);
-                    }
-                    if(i != 0) {
-                        moves.add(i-1);
-                        moves.add(j);
-                        moves.add(i);
-                        moves.add(j);
-                        moves.add(x);
-                    }
-                    if(j != 7 && i != 0) {
-                        moves.add(i-1);
-                        moves.add(j+1);
-                        moves.add(i);
-                        moves.add(j);
-                        moves.add(x);
-                    }
-                    if(j != 7 && i != 7) {
-                        moves.add(i+1);
-                        moves.add(j+1);
-                        moves.add(i);
-                        moves.add(j);
-                        moves.add(x);
-                    }
-                    if(j != 0 && i != 0) {
-                        moves.add(i-1);
-                        moves.add(j-1);
-                        moves.add(i);
-                        moves.add(j);
-                        moves.add(x);
-                    }
-                    if(j != 0 && i != 7) {
-                        moves.add(i+1);
-                        moves.add(j-1);
-                        moves.add(i);
-                        moves.add(j);
-                        moves.add(x);
-                    }
-                }
-                else if(x == 2) { //queen
-                    int a = 0; 
-                    while(i > a) {
-                        a++;
-                        if(board[i-a][j] < 0) {
-                            moves.add(i-a);
-                            moves.add(j);
-                            moves.add(i);
-                            moves.add(j);
-                            moves.add(x);
-                            break;
-                        }
-                        else if(board[i-a][j] == 0) {
-                            moves.add(i-a);
-                            moves.add(j);
-                            moves.add(i);
-                            moves.add(j);
-                            moves.add(x);
-                        }
-                        else {
-                            break;
-                        }
-                    }
-                    a = 0;
-                    while(i + a < 7) {
-                        a++;
-                        if(board[i+a][j] < 0) {
-                            moves.add(i+a);
-                            moves.add(j);
-                            moves.add(i);
-                            moves.add(j);
-                            moves.add(x);
-                            break;
-                        }
-                        else if(board[i+a][j] == 0) {
-                            moves.add(i+a);
-                            moves.add(j);
-                            moves.add(i);
-                            moves.add(j);
-                            moves.add(x);
-                        }
-                        else {
-                            break;
-                        }
-                    }
-                    a = 0;
-                    while(j > a) {
-                        a++;
-                        if(board[i][j-a] < 0) {
-                            moves.add(i);
-                            moves.add(j-a);
-                            moves.add(i);
-                            moves.add(j);
-                            moves.add(x);
-                            break;
-                        }
-                        else if(board[i][j-a] == 0) {
-                            moves.add(i);
-                            moves.add(j-a);
-                            moves.add(i);
-                            moves.add(j);
-                            moves.add(x);
-                        }
-                        else {
-                            break;
-                        }
-                    }
-                    a = 0;
-                    while(j + a < 7) {
-                        a++;
-                        if(board[i][j+a] < 0) {
-                            moves.add(i);
-                            moves.add(j+a);
-                            moves.add(i);
-                            moves.add(j);
-                            moves.add(x);
-                            break;
-                        }
-                        else if(board[i][j+a] == 0) {
-                            moves.add(i);
-                            moves.add(j+a);
-                            moves.add(i);
-                            moves.add(j);
-                            moves.add(x);
-                        }
-                        else {
-                            break;
-                        }
-                    }
-                    a = 0; 
-                    while(i > a && j > a) {
-                        a++;
-                        if(board[i-a][j-a] < 0) {
-                            moves.add(i-a);
-                            moves.add(j-a);
-                            moves.add(i);
-                            moves.add(j);
-                            moves.add(x);
-                            break;
-                        }
-                        else if(board[i-a][j-a] == 0) {
-                            moves.add(i-a);
-                            moves.add(j-a);
-                            moves.add(i);
-                            moves.add(j);
-                            moves.add(x);
-                        }
-                        else {
-                            break;
-                        }
-                    }
-                    a = 0;
-                    while(i + a < 7 && j > a) {
-                        a++;
-                        if(board[i+a][j-a] < 0) {
-                            moves.add(i+a);
-                            moves.add(j-a);
-                            moves.add(i);
-                            moves.add(j);
-                            moves.add(x);
-                            break;
-                        }
-                        else if(board[i+a][j-a] == 0) {
-                            moves.add(i+a);
-                            moves.add(j-a);
-                            moves.add(i);
-                            moves.add(j);
-                            moves.add(x);
-                        }
-                        else {
-                            break;
-                        }
-                    }
-                    a = 0; 
-                    while(i+a < 7 && j+a < 7) {
-                        a++;
-                        if(board[i+a][j+a] < 0) {
-                            moves.add(i+a);
-                            moves.add(j+a);
-                            moves.add(i);
-                            moves.add(j);
-                            moves.add(x);
-                            break;
-                        }
-                        else if(board[i+a][j+a] == 0) {
-                            moves.add(i+a);
-                            moves.add(j+a);
-                            moves.add(i);
-                            moves.add(j);
-                            moves.add(x);
-                        }
-                        else {
-                            break;
-                        }
-                    }
-                    a = 0;
-                    while(i > a && j +a < 7) {
-                        a++;
-                        if(board[i-a][j+a] < 0) {
-                            moves.add(i-a);
-                            moves.add(j+a);
-                            moves.add(i);
-                            moves.add(j);
-                            moves.add(x);
-                            break;
-                        }
-                        else if(board[i-a][j+a] == 0) {
-                            moves.add(i-a);
-                            moves.add(j+a);
-                            moves.add(i);
-                            moves.add(j);
-                            moves.add(x);
-                        }
-                        else {
-                            break;
-                        }
-                    }
-                }
-                else if(x == 3) { //rook
-                    int a = 0; 
-                    while(i > a) {
-                        a++;
-                        if(board[i-a][j] < 0) {
-                            moves.add(i-a);
-                            moves.add(j);
-                            moves.add(i);
-                            moves.add(j);
-                            moves.add(x);
-                            break;
-                        }
-                        else if(board[i-a][j] == 0) {
-                            moves.add(i-a);
-                            moves.add(j);
-                            moves.add(i);
-                            moves.add(j);
-                            moves.add(x);
-                        }
-                        else {
-                            break;
-                        }
-                    }
-                    a = 0;
-                    while(i + a < 7) {
-                        a++;
-                        if(board[i+a][j] < 0) {
-                            moves.add(i+a);
-                            moves.add(j);
-                            moves.add(i);
-                            moves.add(j);
-                            moves.add(x);
-                            break;
-                        }
-                        else if(board[i+a][j] == 0) {
-                            moves.add(i+a);
-                            moves.add(j);
-                            moves.add(i);
-                            moves.add(j);
-                            moves.add(x);
-                        }
-                        else {
-                            break;
-                        }
-                    }
-                    a = 0;
-                    while(j > a) {
-                        a++;
-                        if(board[i][j-a] < 0) {
-                            moves.add(i);
-                            moves.add(j-a);
-                            moves.add(i);
-                            moves.add(j);
-                            moves.add(x);
-                            break;
-                        }
-                        else if(board[i][j-a] == 0) {
-                            moves.add(i);
-                            moves.add(j-a);
-                            moves.add(i);
-                            moves.add(j);
-                            moves.add(x);
-                        }
-                        else {
-                            break;
-                        }
-                    }
-                    a = 0;
-                    while(j + a < 7) {
-                        a++;
-                        if(board[i][j+a] < 0) {
-                            moves.add(i);
-                            moves.add(j+a);
-                            moves.add(i);
-                            moves.add(j);
-                            moves.add(x);
-                            break;
-                        }
-                        else if(board[i][j+a] == 0) {
-                            moves.add(i);
-                            moves.add(j+a);
-                            moves.add(i);
-                            moves.add(j);
-                            moves.add(x);
-                        }
-                        else {
-                            break;
-                        }
-                    }
-                }
-                else if(x == 4) { //bishop
-                    int a = 0; 
-                    while(i > a && j > a) {
-                        a++;
-                        if(board[i-a][j-a] < 0) {
-                            moves.add(i-a);
-                            moves.add(j-a);
-                            moves.add(i);
-                            moves.add(j);
-                            moves.add(x);
-                            break;
-                        }
-                        else if(board[i-a][j-a] == 0) {
-                            moves.add(i-a);
-                            moves.add(j-a);
-                            moves.add(i);
-                            moves.add(j);
-                            moves.add(x);
-                        }
-                        else {
-                            break;
-                        }
-                    }
-                    a = 0;
-                    while(i + a < 7 && j > a) {
-                        a++;
-                        if(board[i+a][j-a] < 0) {
-                            moves.add(i+a);
-                            moves.add(j-a);
-                            moves.add(i);
-                            moves.add(j);
-                            moves.add(x);
-                            break;
-                        }
-                        else if(board[i+a][j-a] == 0) {
-                            moves.add(i+a);
-                            moves.add(j-a);
-                            moves.add(i);
-                            moves.add(j);
-                            moves.add(x);
-                        }
-                        else {
-                            break;
-                        }
-                    }
-                    a = 0; 
-                    while(i+a < 7 && j+a < 7) {
-                        a++;
-                        if(board[i+a][j+a] < 0) {
-                            moves.add(i+a);
-                            moves.add(j+a);
-                            moves.add(i);
-                            moves.add(j);
-                            moves.add(x);
-                            break;
-                        }
-                        else if(board[i+a][j+a] == 0) {
-                            moves.add(i+a);
-                            moves.add(j+a);
-                            moves.add(i);
-                            moves.add(j);
-                            moves.add(x);
-                        }
-                        else {
-                            break;
-                        }
-                    }
-                    a = 0;
-                    while(i > a && j +a < 7) {
-                        a++;
-                        if(board[i-a][j+a] < 0) {
-                            moves.add(i-a);
-                            moves.add(j+a);
-                            moves.add(i);
-                            moves.add(j);
-                            moves.add(x);
-                            break;
-                        }
-                        else if(board[i-a][j+a] == 0) {
-                            moves.add(i-a);
-                            moves.add(j+a);
-                            moves.add(i);
-                            moves.add(j);
-                            moves.add(x);
-                        }
-                        else {
-                            break;
-                        }
-                    }
-                }
-                else if(x == 5) {
-                    if(j < 6 && i != 0) {
-                        moves.add(i-1);
-                        moves.add(j+2);
-                        moves.add(i);
-                        moves.add(j);
-                        moves.add(x);
-                    }
-                    if(j < 6 && i != 7) {                        
-                        moves.add(i+1);
-                        moves.add(j+2);
-                        moves.add(i);
-                        moves.add(j);
-                        moves.add(x);
-                    }
-                    if(j > 1 && i != 0) {
-                        moves.add(i-1);
-                        moves.add(j-2);
-                        moves.add(i);
-                        moves.add(j);
-                        moves.add(x);
-                    }
-                    if(j > 1 && i != 7) {
-                        moves.add(i+1);
-                        moves.add(j-2);
-                        moves.add(i);
-                        moves.add(j);
-                        moves.add(x);
-                    }
-                    if(j != 7 && i > 1) {
-                        moves.add(i-2);
-                        moves.add(j+1);
-                        moves.add(i);
-                        moves.add(j);
-                        moves.add(x);
-                    }
-                    if(j != 7 && i < 6) {
-                        moves.add(i+2);
-                        moves.add(j+1);
-                        moves.add(i);
-                        moves.add(j);
-                        moves.add(x);
-                    }
-                    if(j != 0 && i > 1) {
-                        moves.add(i-2);
-                        moves.add(j-1);
-                        moves.add(i);
-                        moves.add(j);
-                        moves.add(x);
-                    }
-                    if(j != 0 && i < 6) {
-                        moves.add(i+2);
-                        moves.add(j-1);
-                        moves.add(i);
-                        moves.add(j);
-                        moves.add(x);
-                    }
-                }
-                else { //pawn
-                    if(board[i-1][j] == 0) {
-                        moves.add(i-1);
-                        moves.add(j);
-                        moves.add(i);
-                        moves.add(j);
-                        moves.add(x);
-                    }
-                    if(i == 6) {
-                        if(board[5][j] == 0 && board[4][j] == 0) {
-                            moves.add(4);
-                            moves.add(j);
-                            moves.add(i);
-                            moves.add(j);
-                            moves.add(x);
-                        }
-                    }
-                    if(j!= 0 && board[i-1][j-1] < 0) {
-                        moves.add(i-1);
-                        moves.add(j-1);
-                        moves.add(i);
-                        moves.add(j);
-                        moves.add(x);
-                    }
-                    if(j != 7 && board[i-1][j+1] < 0) {
-                        moves.add(i-1);
-                        moves.add(j+1);
-                        moves.add(i);
-                        moves.add(j);
-                        moves.add(x);
-                    }
-                }
-            }
-        }
+        moves = giveMoves(moves, board, 1);
         for(int k = 0; k < moves.size()/5; k++) {
             int movetorow = moves.get(5*k);
             int movetocolumn = moves.get(5*k+1);
@@ -596,38 +80,6 @@ public class chess {
         return bestMove;
     }
 
-    public static double doStuff(int[][] board, int movetorow, int movetocolumn, int depth, int i, int j, double bestValue, int x, int gameState, double alpha, double beta) {
-        int y = board[movetorow][movetocolumn];
-        if(move(board, i, j, movetorow, movetocolumn)) {
-            //printBoard(board);
-            //System.out.println(depth);
-            double v = minimax(board, depth-1, false, gameState, alpha, beta);
-            bestValue = Math.max(bestValue, v);
-            alpha = Math.max(alpha, bestValue);
-            if(alpha >= beta) {
-
-            }
-            //System.out.println(bestValue);
-            board[i][j] = x; //undo the move
-            board[movetorow][movetocolumn] = y;
-        }
-        return bestValue;
-    }
-
-    public static double doStuff2(int[][] board, int movetorow, int movetocolumn, int depth, int i, int j, double bestValue, int x, int gameState, double alpha, double beta) {
-        int y = board[movetorow][movetocolumn];
-        if(move(board, i, j, movetorow, movetocolumn)) {
-            //printBoard(board);
-            //System.out.println(depth);
-            double v = minimax(board, depth-1, true, gameState, alpha, beta);
-            bestValue = Math.min(bestValue, v);
-            //System.out.println(bestValue);
-            board[i][j] = x; //undo the move
-            board[movetorow][movetocolumn] = y;
-        }
-        return bestValue;
-    }
-
     public static double minimax(int[][] board, int depth, boolean maximizingPlayer, int gameState, double alpha, double beta) {
         if(depth == 0) {
             return evalPosition(board, gameState);
@@ -635,527 +87,13 @@ public class chess {
         if(maximizingPlayer) {
             double bestValue = -10000000;
             ArrayList<Integer> moves = new ArrayList<Integer>();
-            for(int i = 0; i < 8; i++) {
-                for(int j = 0; j < 8; j++) {
-                    if(board[i][j] <= 0) {
-                        continue;
-                    }
-                    int x = board[i][j];
-                    //have each piece make their move, dostuff, then undo the move
-                    if(x == 1) {
-                        if(j != 7) {
-                            moves.add(i);
-                            moves.add(j+1);
-                            moves.add(i);
-                            moves.add(j);
-                            moves.add(x);
-                        }
-                        if(i != 7) {
-                            moves.add(i+1);
-                            moves.add(j);
-                            moves.add(i);
-                            moves.add(j);
-                            moves.add(x);
-                        }
-                        if(j != 0) {
-                            moves.add(i);
-                            moves.add(j-1);
-                            moves.add(i);
-                            moves.add(j);
-                            moves.add(x);
-                        }
-                        if(i != 0) {
-                            moves.add(i-1);
-                            moves.add(j);
-                            moves.add(i);
-                            moves.add(j);
-                            moves.add(x);
-                        }
-                        if(j != 7 && i != 0) {
-                            moves.add(i-1);
-                            moves.add(j+1);
-                            moves.add(i);
-                            moves.add(j);
-                            moves.add(x);
-                        }
-                        if(j != 7 && i != 7) {
-                            moves.add(i+1);
-                            moves.add(j+1);
-                            moves.add(i);
-                            moves.add(j);
-                            moves.add(x);
-                        }
-                        if(j != 0 && i != 0) {
-                            moves.add(i-1);
-                            moves.add(j-1);
-                            moves.add(i);
-                            moves.add(j);
-                            moves.add(x);
-                        }
-                        if(j != 0 && i != 7) {
-                            moves.add(i+1);
-                            moves.add(j-1);
-                            moves.add(i);
-                            moves.add(j);
-                            moves.add(x);
-                        }
-                    }
-                    else if(x == 2) {
-                        int a = 0; 
-                        while(i > a) {
-                            a++;
-                            if(board[i-a][j] < 0) {
-                                moves.add(i-a);
-                                moves.add(j);
-                                moves.add(i);
-                                moves.add(j);
-                                moves.add(x);
-                                break;
-                            }
-                            else if(board[i-a][j] == 0) {
-                                moves.add(i-a);
-                                moves.add(j);
-                                moves.add(i);
-                                moves.add(j);
-                                moves.add(x);
-                            }
-                            else {
-                                break;
-                            }
-                        }
-                        a = 0;
-                        while(i + a < 7) {
-                            a++;
-                            if(board[i+a][j] < 0) {
-                                moves.add(i+a);
-                                moves.add(j);
-                                moves.add(i);
-                                moves.add(j);
-                                moves.add(x);
-                                break;
-                            }
-                            else if(board[i+a][j] == 0) {
-                                moves.add(i+a);
-                                moves.add(j);
-                                moves.add(i);
-                                moves.add(j);
-                                moves.add(x);
-                            }
-                            else {
-                                break;
-                            }
-                        }
-                        a = 0;
-                        while(j > a) {
-                            a++;
-                            if(board[i][j-a] < 0) {
-                                moves.add(i);
-                                moves.add(j-a);
-                                moves.add(i);
-                                moves.add(j);
-                                moves.add(x);
-                                break;
-                            }
-                            else if(board[i][j-a] == 0) {
-                                moves.add(i);
-                                moves.add(j-a);
-                                moves.add(i);
-                                moves.add(j);
-                                moves.add(x);
-                            }
-                            else {
-                                break;
-                            }
-                        }
-                        a = 0;
-                        while(j + a < 7) {
-                            a++;
-                            if(board[i][j+a] < 0) {
-                                moves.add(i);
-                                moves.add(j+a);
-                                moves.add(i);
-                                moves.add(j);
-                                moves.add(x);
-                                break;
-                            }
-                            else if(board[i][j+a] == 0) {
-                                moves.add(i);
-                                moves.add(j+a);
-                                moves.add(i);
-                                moves.add(j);
-                                moves.add(x);
-                            }
-                            else {
-                                break;
-                            }
-                        }
-                        a = 0; 
-                        while(i > a && j > a) {
-                            a++;
-                            if(board[i-a][j-a] < 0) {
-                                moves.add(i-a);
-                                moves.add(j-a);
-                                moves.add(i);
-                                moves.add(j);
-                                moves.add(x);
-                                break;
-                            }
-                            else if(board[i-a][j-a] == 0) {
-                                moves.add(i-a);
-                                moves.add(j-a);
-                                moves.add(i);
-                                moves.add(j);
-                                moves.add(x);
-                            }
-                            else {
-                                break;
-                            }
-                        }
-                        a = 0;
-                        while(i + a < 7 && j > a) {
-                            a++;
-                            if(board[i+a][j-a] < 0) {
-                                moves.add(i+a);
-                                moves.add(j-a);
-                                moves.add(i);
-                                moves.add(j);
-                                moves.add(x);
-                                break;
-                            }
-                            else if(board[i+a][j-a] == 0) {
-                                moves.add(i+a);
-                                moves.add(j-a);
-                                moves.add(i);
-                                moves.add(j);
-                                moves.add(x);
-                            }
-                            else {
-                                break;
-                            }
-                        }
-                        a = 0; 
-                        while(i+a < 7 && j+a < 7) {
-                            a++;
-                            if(board[i+a][j+a] < 0) {
-                                moves.add(i+a);
-                                moves.add(j+a);
-                                moves.add(i);
-                                moves.add(j);
-                                moves.add(x);
-                                break;
-                            }
-                            else if(board[i+a][j+a] == 0) {
-                                moves.add(i+a);
-                                moves.add(j+a);
-                                moves.add(i);
-                                moves.add(j);
-                                moves.add(x);
-                            }
-                            else {
-                                break;
-                            }
-                        }
-                        a = 0;
-                        while(i > a && j +a < 7) {
-                            a++;
-                            if(board[i-a][j+a] < 0) {
-                                moves.add(i-a);
-                                moves.add(j+a);
-                                moves.add(i);
-                                moves.add(j);
-                                moves.add(x);
-                                break;
-                            }
-                            else if(board[i-a][j+a] == 0) {
-                                moves.add(i-a);
-                                moves.add(j+a);
-                                moves.add(i);
-                                moves.add(j);
-                                moves.add(x);
-                            }
-                            else {
-                                break;
-                            }
-                        }
-                    }
-                    else if(x == 3) {
-                        int a = 0; 
-                        while(i > a) {
-                            a++;
-                            if(board[i-a][j] < 0) {
-                                moves.add(i-a);
-                                moves.add(j);
-                                moves.add(i);
-                                moves.add(j);
-                                moves.add(x);
-                                break;
-                            }
-                            else if(board[i-a][j] == 0) {
-                                moves.add(i-a);
-                                moves.add(j);
-                                moves.add(i);
-                                moves.add(j);
-                                moves.add(x);
-                            }
-                            else {
-                                break;
-                            }
-                        }
-                        a = 0;
-                        while(i + a < 7) {
-                            a++;
-                            if(board[i+a][j] < 0) {
-                                moves.add(i+a);
-                                moves.add(j);
-                                moves.add(i);
-                                moves.add(j);
-                                moves.add(x);
-                                break;
-                            }
-                            else if(board[i+a][j] == 0) {
-                                moves.add(i+a);
-                                moves.add(j);
-                                moves.add(i);
-                                moves.add(j);
-                                moves.add(x);
-                            }
-                            else {
-                                break;
-                            }
-                        }
-                        a = 0;
-                        while(j > a) {
-                            a++;
-                            if(board[i][j-a] < 0) {
-                                moves.add(i);
-                                moves.add(j-a);
-                                moves.add(i);
-                                moves.add(j);
-                                moves.add(x);
-                                break;
-                            }
-                            else if(board[i][j-a] == 0) {
-                                moves.add(i);
-                                moves.add(j-a);
-                                moves.add(i);
-                                moves.add(j);
-                                moves.add(x);
-                            }
-                            else {
-                                break;
-                            }
-                        }
-                        a = 0;
-                        while(j + a < 7) {
-                            a++;
-                            if(board[i][j+a] < 0) {
-                                moves.add(i);
-                                moves.add(j+a);
-                                moves.add(i);
-                                moves.add(j);
-                                moves.add(x);
-                                break;
-                            }
-                            else if(board[i][j+a] == 0) {
-                                moves.add(i);
-                                moves.add(j+a);
-                                moves.add(i);
-                                moves.add(j);
-                                moves.add(x);
-                            }
-                            else {
-                                break;
-                            }
-                        }
-                    }
-                    else if(x == 4) {
-                        int a = 0; 
-                        while(i > a && j > a) {
-                            a++;
-                            if(board[i-a][j-a] < 0) {
-                                moves.add(i-a);
-                                moves.add(j-a);
-                                moves.add(i);
-                                moves.add(j);
-                                moves.add(x);
-                                break;
-                            }
-                            else if(board[i-a][j-a] == 0) {
-                                moves.add(i-a);
-                                moves.add(j-a);
-                                moves.add(i);
-                                moves.add(j);
-                                moves.add(x);
-                            }
-                            else {
-                                break;
-                            }
-                        }
-                        a = 0;
-                        while(i + a < 7 && j > a) {
-                            a++;
-                            if(board[i+a][j-a] < 0) {
-                                moves.add(i+a);
-                                moves.add(j-a);
-                                moves.add(i);
-                                moves.add(j);
-                                moves.add(x);
-                                break;
-                            }
-                            else if(board[i+a][j-a] == 0) {
-                                moves.add(i+a);
-                                moves.add(j-a);
-                                moves.add(i);
-                                moves.add(j);
-                                moves.add(x);
-                            }
-                            else {
-                                break;
-                            }
-                        }
-                        a = 0; 
-                        while(i+a < 7 && j+a < 7) {
-                            a++;
-                            if(board[i+a][j+a] < 0) {
-                                moves.add(i+a);
-                                moves.add(j+a);
-                                moves.add(i);
-                                moves.add(j);
-                                moves.add(x);
-                                break;
-                            }
-                            else if(board[i+a][j+a] == 0) {
-                                moves.add(i+a);
-                                moves.add(j+a);
-                                moves.add(i);
-                                moves.add(j);
-                                moves.add(x);
-                            }
-                            else {
-                                break;
-                            }
-                        }
-                        a = 0;
-                        while(i > a && j +a < 7) {
-                            a++;
-                            if(board[i-a][j+a] < 0) {
-                                moves.add(i-a);
-                                moves.add(j+a);
-                                moves.add(i);
-                                moves.add(j);
-                                moves.add(x);
-                                break;
-                            }
-                            else if(board[i-a][j+a] == 0) {
-                                moves.add(i-a);
-                                moves.add(j+a);
-                                moves.add(i);
-                                moves.add(j);
-                                moves.add(x);
-                            }
-                            else {
-                                break;
-                            }
-                        }
-                    }
-                    else if(x == 5) {
-                        if(j < 6 && i != 0) {
-                            moves.add(i-1);
-                            moves.add(j+2);
-                            moves.add(i);
-                            moves.add(j);
-                            moves.add(x);
-                        }
-                        if(j < 6 && i != 7) {                        
-                            moves.add(i+1);
-                            moves.add(j+2);
-                            moves.add(i);
-                            moves.add(j);
-                            moves.add(x);
-                        }
-                        if(j > 1 && i != 0) {
-                            moves.add(i-1);
-                            moves.add(j-2);
-                            moves.add(i);
-                            moves.add(j);
-                            moves.add(x);
-                        }
-                        if(j > 1 && i != 7) {
-                            moves.add(i+1);
-                            moves.add(j-2);
-                            moves.add(i);
-                            moves.add(j);
-                            moves.add(x);
-                        }
-                        if(j != 7 && i > 1) {
-                            moves.add(i-2);
-                            moves.add(j+1);
-                            moves.add(i);
-                            moves.add(j);
-                            moves.add(x);
-                        }
-                        if(j != 7 && i < 6) {
-                            moves.add(i+2);
-                            moves.add(j+1);
-                            moves.add(i);
-                            moves.add(j);
-                            moves.add(x);
-                        }
-                        if(j != 0 && i > 1) {
-                            moves.add(i-2);
-                            moves.add(j-1);
-                            moves.add(i);
-                            moves.add(j);
-                            moves.add(x);
-                        }
-                        if(j != 0 && i < 6) {
-                            moves.add(i+2);
-                            moves.add(j-1);
-                            moves.add(i);
-                            moves.add(j);
-                            moves.add(x);
-                        }
-                    }
-                    else {
-                        if(board[i-1][j] == 0) {
-                            moves.add(i-1);
-                            moves.add(j);
-                            moves.add(i);
-                            moves.add(j);
-                            moves.add(x);
-                        }
-                        if(i == 6) {
-                            if(board[5][j] == 0 && board[4][j] == 0) {
-                                moves.add(4);
-                                moves.add(j);
-                                moves.add(i);
-                                moves.add(j);
-                                moves.add(x);
-                            }
-                        }
-                        if(j!= 0 && board[i-1][j-1] < 0) {
-                            moves.add(i-1);
-                            moves.add(j-1);
-                            moves.add(i);
-                            moves.add(j);
-                            moves.add(x);
-                        }
-                        if(j != 7 && board[i-1][j+1] < 0) {
-                            moves.add(i-1);
-                            moves.add(j+1);
-                            moves.add(i);
-                            moves.add(j);
-                            moves.add(x);
-                        }
-                    }
-                }
-            }
+            moves = giveMoves(moves, board, 1);
             if(moves.size() == 0) {
                 return evalPosition(board, gameState);
             }
             for(int k = 0; k < moves.size()/5; k++) {
                 int movetorow = moves.get(5*k);
-                int movetocolumn = moves.get(5*k);
+                int movetocolumn = moves.get(5*k+1);
                 int i = moves.get(5*k+2);
                 int j = moves.get(5*k+3);
                 int x = moves.get(5*k+4);
@@ -1175,7 +113,6 @@ public class chess {
                     board[i][j] = x; //undo the move
                     board[movetorow][movetocolumn] = y;
                 }
-                //bestValue = Math.max(bestValue, doStuff(board, moves.get(5*k), moves.get(5*k+1), depth, moves.get(5*k+2), moves.get(5*k+3), bestValue, moves.get(5*k+4), gameState, alpha, beta));
             }
             //System.out.println(bestValue);
             return bestValue;
@@ -1184,527 +121,13 @@ public class chess {
             //System.out.println(1);
             double bestValue = 10000000;
             ArrayList<Integer> moves = new ArrayList<Integer>();
-            for(int i = 0; i < 8; i++) {
-                for(int j = 0; j < 8; j++) {
-                    if(board[i][j] >= 0) {
-                        continue;
-                    }
-                    int x = board[i][j];
-                    //have each piece make their move, dostuff, then undo the move
-                    if(x == -1) {
-                        if(j != 7) {
-                            moves.add(i);
-                            moves.add(j+1);
-                            moves.add(i);
-                            moves.add(j);
-                            moves.add(x);
-                        }
-                        if(i != 7) {
-                            moves.add(i+1);
-                            moves.add(j);
-                            moves.add(i);
-                            moves.add(j);
-                            moves.add(x);
-                        }
-                        if(j != 0) {
-                            moves.add(i);
-                            moves.add(j-1);
-                            moves.add(i);
-                            moves.add(j);
-                            moves.add(x);
-                        }
-                        if(i != 0) {
-                            moves.add(i-1);
-                            moves.add(j);
-                            moves.add(i);
-                            moves.add(j);
-                            moves.add(x);
-                        }
-                        if(j != 7 && i != 0) {
-                            moves.add(i-1);
-                            moves.add(j+1);
-                            moves.add(i);
-                            moves.add(j);
-                            moves.add(x);
-                        }
-                        if(j != 7 && i != 7) {
-                            moves.add(i+1);
-                            moves.add(j+1);
-                            moves.add(i);
-                            moves.add(j);
-                            moves.add(x);
-                        }
-                        if(j != 0 && i != 0) {
-                            moves.add(i-1);
-                            moves.add(j-1);
-                            moves.add(i);
-                            moves.add(j);
-                            moves.add(x);
-                        }
-                        if(j != 0 && i != 7) {
-                            moves.add(i+1);
-                            moves.add(j-1);
-                            moves.add(i);
-                            moves.add(j);
-                            moves.add(x);
-                        }
-                    }
-                    else if(x == -2) {
-                        int a = 0; 
-                        while(i > a) {
-                            a++;
-                            if(board[i-a][j] > 0) {
-                                moves.add(i-a);
-                                moves.add(j);
-                                moves.add(i);
-                                moves.add(j);
-                                moves.add(x);
-                                break;
-                            }
-                            else if(board[i-a][j] == 0) {
-                                moves.add(i-a);
-                                moves.add(j);
-                                moves.add(i);
-                                moves.add(j);
-                                moves.add(x);
-                            }
-                            else {
-                                break;
-                            }
-                        }
-                        a = 0;
-                        while(i + a < 7) {
-                            a++;
-                            if(board[i+a][j] > 0) {
-                                moves.add(i+a);
-                                moves.add(j);
-                                moves.add(i);
-                                moves.add(j);
-                                moves.add(x);
-                                break;
-                            }
-                            else if(board[i+a][j] == 0) {
-                                moves.add(i+a);
-                                moves.add(j);
-                                moves.add(i);
-                                moves.add(j);
-                                moves.add(x);
-                            }
-                            else {
-                                break;
-                            }
-                        }
-                        a = 0;
-                        while(j > a) {
-                            a++;
-                            if(board[i][j-a] > 0) {
-                                moves.add(i);
-                                moves.add(j-a);
-                                moves.add(i);
-                                moves.add(j);
-                                moves.add(x);
-                                break;
-                            }
-                            else if(board[i][j-a] == 0) {
-                                moves.add(i);
-                                moves.add(j-a);
-                                moves.add(i);
-                                moves.add(j);
-                                moves.add(x);
-                            }
-                            else {
-                                break;
-                            }
-                        }
-                        a = 0;
-                        while(j + a < 7) {
-                            a++;
-                            if(board[i][j+a] > 0) {
-                                moves.add(i);
-                                moves.add(j+a);
-                                moves.add(i);
-                                moves.add(j);
-                                moves.add(x);
-                                break;
-                            }
-                            else if(board[i][j+a] == 0) {
-                                moves.add(i);
-                                moves.add(j+a);
-                                moves.add(i);
-                                moves.add(j);
-                                moves.add(x);
-                            }
-                            else {
-                                break;
-                            }
-                        }
-                        a = 0; 
-                        while(i > a && j > a) {
-                            a++;
-                            if(board[i-a][j-a] > 0) {
-                                moves.add(i-a);
-                                moves.add(j-a);
-                                moves.add(i);
-                                moves.add(j);
-                                moves.add(x);
-                                break;
-                            }
-                            else if(board[i-a][j-a] == 0) {
-                                moves.add(i-a);
-                                moves.add(j-a);
-                                moves.add(i);
-                                moves.add(j);
-                                moves.add(x);
-                            }
-                            else {
-                                break;
-                            }
-                        }
-                        a = 0;
-                        while(i + a < 7 && j > a) {
-                            a++;
-                            if(board[i+a][j-a] > 0) {
-                                moves.add(i+a);
-                                moves.add(j-a);
-                                moves.add(i);
-                                moves.add(j);
-                                moves.add(x);
-                                break;
-                            }
-                            else if(board[i+a][j-a] == 0) {
-                                moves.add(i+a);
-                                moves.add(j-a);
-                                moves.add(i);
-                                moves.add(j);
-                                moves.add(x);
-                            }
-                            else {
-                                break;
-                            }
-                        }
-                        a = 0; 
-                        while(i+a < 7 && j+a < 7) {
-                            a++;
-                            if(board[i+a][j+a] > 0) {
-                                moves.add(i+a);
-                                moves.add(j+a);
-                                moves.add(i);
-                                moves.add(j);
-                                moves.add(x);
-                                break;
-                            }
-                            else if(board[i+a][j+a] == 0) {
-                                moves.add(i+a);
-                                moves.add(j+a);
-                                moves.add(i);
-                                moves.add(j);
-                                moves.add(x);
-                            }
-                            else {
-                                break;
-                            }
-                        }
-                        a = 0;
-                        while(i > a && j +a < 7) {
-                            a++;
-                            if(board[i-a][j+a] > 0) {
-                                moves.add(i-a);
-                                moves.add(j+a);
-                                moves.add(i);
-                                moves.add(j);
-                                moves.add(x);
-                                break;
-                            }
-                            else if(board[i-a][j+a] == 0) {
-                                moves.add(i-a);
-                                moves.add(j+a);
-                                moves.add(i);
-                                moves.add(j);
-                                moves.add(x);
-                            }
-                            else {
-                                break;
-                            }
-                        }
-                    }
-                    else if(x == -3) {
-                        int a = 0; 
-                        while(i > a) {
-                            a++;
-                            if(board[i-a][j] > 0) {
-                                moves.add(i-a);
-                                moves.add(j);
-                                moves.add(i);
-                                moves.add(j);
-                                moves.add(x);
-                                break;
-                            }
-                            else if(board[i-a][j] == 0) {
-                                moves.add(i-a);
-                                moves.add(j);
-                                moves.add(i);
-                                moves.add(j);
-                                moves.add(x);
-                            }
-                            else {
-                                break;
-                            }
-                        }
-                        a = 0;
-                        while(i + a < 7) {
-                            a++;
-                            if(board[i+a][j] > 0) {
-                                moves.add(i+a);
-                                moves.add(j);
-                                moves.add(i);
-                                moves.add(j);
-                                moves.add(x);
-                                break;
-                            }
-                            else if(board[i+a][j] == 0) {
-                                moves.add(i+a);
-                                moves.add(j);
-                                moves.add(i);
-                                moves.add(j);
-                                moves.add(x);
-                            }
-                            else {
-                                break;
-                            }
-                        }
-                        a = 0;
-                        while(j > a) {
-                            a++;
-                            if(board[i][j-a] > 0) {
-                                moves.add(i);
-                                moves.add(j-a);
-                                moves.add(i);
-                                moves.add(j);
-                                moves.add(x);
-                                break;
-                            }
-                            else if(board[i][j-a] == 0) {
-                                moves.add(i);
-                                moves.add(j-a);
-                                moves.add(i);
-                                moves.add(j);
-                                moves.add(x);
-                            }
-                            else {
-                                break;
-                            }
-                        }
-                        a = 0;
-                        while(j + a < 7) {
-                            a++;
-                            if(board[i][j+a] > 0) {
-                                moves.add(i);
-                                moves.add(j+a);
-                                moves.add(i);
-                                moves.add(j);
-                                moves.add(x);
-                                break;
-                            }
-                            else if(board[i][j+a] == 0) {
-                                moves.add(i);
-                                moves.add(j+a);
-                                moves.add(i);
-                                moves.add(j);
-                                moves.add(x);
-                            }
-                            else {
-                                break;
-                            }
-                        }
-                    }
-                    else if(x == -4) {
-                        int a = 0; 
-                        while(i > a && j > a) {
-                            a++;
-                            if(board[i-a][j-a] > 0) {
-                                moves.add(i-a);
-                                moves.add(j-a);
-                                moves.add(i);
-                                moves.add(j);
-                                moves.add(x);
-                                break;
-                            }
-                            else if(board[i-a][j-a] == 0) {
-                                moves.add(i-a);
-                                moves.add(j-a);
-                                moves.add(i);
-                                moves.add(j);
-                                moves.add(x);
-                            }
-                            else {
-                                break;
-                            }
-                        }
-                        a = 0;
-                        while(i + a < 7 && j > a) {
-                            a++;
-                            if(board[i+a][j-a] > 0) {
-                                moves.add(i+a);
-                                moves.add(j-a);
-                                moves.add(i);
-                                moves.add(j);
-                                moves.add(x);
-                                break;
-                            }
-                            else if(board[i+a][j-a] == 0) {
-                                moves.add(i+a);
-                                moves.add(j-a);
-                                moves.add(i);
-                                moves.add(j);
-                                moves.add(x);
-                            }
-                            else {
-                                break;
-                            }
-                        }
-                        a = 0; 
-                        while(i+a < 7 && j+a < 7) {
-                            a++;
-                            if(board[i+a][j+a] > 0) {
-                                moves.add(i+a);
-                                moves.add(j+a);
-                                moves.add(i);
-                                moves.add(j);
-                                moves.add(x);
-                                break;
-                            }
-                            else if(board[i+a][j+a] == 0) {
-                                moves.add(i+a);
-                                moves.add(j+a);
-                                moves.add(i);
-                                moves.add(j);
-                                moves.add(x);
-                            }
-                            else {
-                                break;
-                            }
-                        }
-                        a = 0;
-                        while(i > a && j +a < 7) {
-                            a++;
-                            if(board[i-a][j+a] > 0) {
-                                moves.add(i-a);
-                                moves.add(j+a);
-                                moves.add(i);
-                                moves.add(j);
-                                moves.add(x);
-                                break;
-                            }
-                            else if(board[i-a][j+a] == 0) {
-                                moves.add(i-a);
-                                moves.add(j+a);
-                                moves.add(i);
-                                moves.add(j);
-                                moves.add(x);
-                            }
-                            else {
-                                break;
-                            }
-                        }
-                    }
-                    else if(x == -5) {
-                        if(j < 6 && i != 0) {
-                            moves.add(i-1);
-                            moves.add(j+2);
-                            moves.add(i);
-                            moves.add(j);
-                            moves.add(x);
-                        }
-                        if(j < 6 && i != 7) {                        
-                            moves.add(i+1);
-                            moves.add(j+2);
-                            moves.add(i);
-                            moves.add(j);
-                            moves.add(x);
-                        }
-                        if(j > 1 && i != 0) {
-                            moves.add(i-1);
-                            moves.add(j-2);
-                            moves.add(i);
-                            moves.add(j);
-                            moves.add(x);
-                        }
-                        if(j > 1 && i != 7) {
-                            moves.add(i+1);
-                            moves.add(j-2);
-                            moves.add(i);
-                            moves.add(j);
-                            moves.add(x);
-                        }
-                        if(j != 7 && i > 1) {
-                            moves.add(i-2);
-                            moves.add(j+1);
-                            moves.add(i);
-                            moves.add(j);
-                            moves.add(x);
-                        }
-                        if(j != 7 && i < 6) {
-                            moves.add(i+2);
-                            moves.add(j+1);
-                            moves.add(i);
-                            moves.add(j);
-                            moves.add(x);
-                        }
-                        if(j != 0 && i > 1) {
-                            moves.add(i-2);
-                            moves.add(j-1);
-                            moves.add(i);
-                            moves.add(j);
-                            moves.add(x);
-                        }
-                        if(j != 0 && i < 6) {
-                            moves.add(i+2);
-                            moves.add(j-1);
-                            moves.add(i);
-                            moves.add(j);
-                            moves.add(x);
-                        }
-                    }
-                    else {
-                        if(board[i+1][j] == 0) {
-                            moves.add(i+1);
-                            moves.add(j);
-                            moves.add(i);
-                            moves.add(j);
-                            moves.add(x);
-                        }
-                        if(i == 1) {
-                            if(board[2][j] == 0 && board[3][j] == 0) {
-                                moves.add(3);
-                                moves.add(j);
-                                moves.add(i);
-                                moves.add(j);
-                                moves.add(x);
-                            }
-                        }
-                        if(j!= 0 && board[i+1][j-1] > 0) {
-                            moves.add(i+1);
-                            moves.add(j-1);
-                            moves.add(i);
-                            moves.add(j);
-                            moves.add(x);
-                        }
-                        if(j != 7 && board[i+1][j+1] > 0) {
-                            moves.add(i+1);
-                            moves.add(j+1);
-                            moves.add(i);
-                            moves.add(j); 
-                            moves.add(x);
-                        }
-                    }
-                }
-            }
+            moves = giveMoves(moves, board, -1);
             if(moves.size() == 0) {
                 return evalPosition(board, gameState);
             }
             for(int k = 0; k < moves.size()/5; k++) {
                 int movetorow = moves.get(5*k);
-                int movetocolumn = moves.get(5*k);
+                int movetocolumn = moves.get(5*k+1);
                 int i = moves.get(5*k+2);
                 int j = moves.get(5*k+3);
                 int x = moves.get(5*k+4);
@@ -1724,7 +147,6 @@ public class chess {
                     board[i][j] = x; //undo the move
                     board[movetorow][movetocolumn] = y;
                 }
-                //bestValue = Math.min(bestValue, doStuff2(board, moves.get(5*k), moves.get(5*k+1), depth, moves.get(5*k+2), moves.get(5*k+3), bestValue, moves.get(5*k+4), gameState));
             }
             //System.out.println(bestValue);
             return bestValue;
@@ -1737,7 +159,7 @@ public class chess {
         double centerControl = 0.03;
         double kingSafety = 0.2;
         double bishopPair = 0.5;
-        double inactivePiece = 0.05;
+        double inactivePiece = 0.1;
         boolean isWKing = false;
         boolean isBKing = false;
         int wkingX = 0;
@@ -1953,11 +375,11 @@ public class chess {
                         while(i > a) {
                             a++;
                             if(board[i-a][j] < 0) {
-                                score = score + move;
+                                score = score + move*0.7;
                                 break;
                             }
                             else if(board[i-a][j] == 0) {
-                                score = score + move;
+                                score = score + move*0.7;
                             }
                             else {
                                 break;
@@ -1967,11 +389,11 @@ public class chess {
                         while(i + a < 7) {
                             a++;
                             if(board[i+a][j] < 0) {
-                                score = score + move;
+                                score = score + move*0.7;
                                 break;
                             }
                             else if(board[i+a][j] == 0) {
-                                score = score + move;
+                                score = score + move*0.7;
                             }
                             else {
                                 break;
@@ -1981,11 +403,11 @@ public class chess {
                         while(j > a) {
                             a++;
                             if(board[i][j-a] < 0) {
-                                score = score + move;
+                                score = score + move*0.7;
                                 break;
                             }
                             else if(board[i][j-a] == 0) {
-                                score = score + move;
+                                score = score + move*0.7;
                             }
                             else {
                                 break;
@@ -1995,11 +417,11 @@ public class chess {
                         while(j + a < 7) {
                             a++;
                             if(board[i][j+a] < 0) {
-                                score = score + move;
+                                score = score + move*0.7;
                                 break;
                             }
                             else if(board[i][j+a] == 0) {
-                                score = score + move;
+                                score = score + move*0.7;
                             }
                             else {
                                 break;
@@ -2066,28 +488,28 @@ public class chess {
                     }
                     else if(x == 5) {
                         if(j < 6 && i != 0) {
-                            score = score + move;
+                            score = score + move*1.5;
                         }
                         if(j < 6 && i != 7) {                        
-                            score = score + move;
+                            score = score + move*1.5;
                         }
                         if(j > 1 && i != 0) {
-                            score = score + move;
+                            score = score + move*1.5;
                         }
                         if(j > 1 && i != 7) {
-                            score = score + move;
+                            score = score + move*1.5;
                         }
                         if(j != 7 && i > 1) {
-                            score = score + move;
+                            score = score + move*1.5;
                         }
                         if(j != 7 && i < 6) {
-                            score = score + move;
+                            score = score + move*1.5;
                         }
                         if(j != 0 && i > 1) {
-                            score = score + move;
+                            score = score + move*1.5;
                         }
                         if(j != 0 && i < 6) {
-                            score = score + move;
+                            score = score + move*1.5;
                         }
                     }
                     else { //pawn
@@ -2124,6 +546,511 @@ public class chess {
             }
             return score;
         }
+    }
+    
+    public static ArrayList<Integer> giveMoves(ArrayList<Integer> moves, int[][] board, int player) {
+        for(int i = 0; i <  8; i++) {
+            for(int j = 0; j < 8; j++) {
+                if(board[i][j] * player <= 0) {
+                    continue;
+                }
+                int x = board[i][j];
+                //have each piece make their move, dostuff, then undo the move
+                if(x == 1) {
+                    if(j != 7) {
+                        moves.add(i);
+                        moves.add(j+1);
+                        moves.add(i);
+                        moves.add(j);
+                        moves.add(x);
+                    }
+                    if(i != 7) {
+                        moves.add(i+1);
+                        moves.add(j);
+                        moves.add(i);
+                        moves.add(j);
+                        moves.add(x);
+                    }
+                    if(j != 0) {
+                        moves.add(i);
+                        moves.add(j-1);
+                        moves.add(i);
+                        moves.add(j);
+                        moves.add(x);
+                    }
+                    if(i != 0) {
+                        moves.add(i-1);
+                        moves.add(j);
+                        moves.add(i);
+                        moves.add(j);
+                        moves.add(x);
+                    }
+                    if(j != 7 && i != 0) {
+                        moves.add(i-1);
+                        moves.add(j+1);
+                        moves.add(i);
+                        moves.add(j);
+                        moves.add(x);
+                    }
+                    if(j != 7 && i != 7) {
+                        moves.add(i+1);
+                        moves.add(j+1);
+                        moves.add(i);
+                        moves.add(j);
+                        moves.add(x);
+                    }
+                    if(j != 0 && i != 0) {
+                        moves.add(i-1);
+                        moves.add(j-1);
+                        moves.add(i);
+                        moves.add(j);
+                        moves.add(x);
+                    }
+                    if(j != 0 && i != 7) {
+                        moves.add(i+1);
+                        moves.add(j-1);
+                        moves.add(i);
+                        moves.add(j);
+                        moves.add(x);
+                    }
+                }
+                else if(x == 2) { //queen
+                    int a = 0; 
+                    while(i > a) {
+                        a++;
+                        if(board[i-a][j] != 0) {
+                            moves.add(i-a);
+                            moves.add(j);
+                            moves.add(i);
+                            moves.add(j);
+                            moves.add(x);
+                            break;
+                        }
+                        else {
+                            moves.add(i-a);
+                            moves.add(j);
+                            moves.add(i);
+                            moves.add(j);
+                            moves.add(x);
+                        }
+                    }
+                    a = 0;
+                    while(i + a < 7) {
+                        a++;
+                        if(board[i+a][j] != 0) {
+                            moves.add(i+a);
+                            moves.add(j);
+                            moves.add(i);
+                            moves.add(j);
+                            moves.add(x);
+                            break;
+                        }
+                        else {
+                            moves.add(i+a);
+                            moves.add(j);
+                            moves.add(i);
+                            moves.add(j);
+                            moves.add(x);
+                        }
+                    }
+                    a = 0;
+                    while(j > a) {
+                        a++;
+                        if(board[i][j-a] != 0) {
+                            moves.add(i);
+                            moves.add(j-a);
+                            moves.add(i);
+                            moves.add(j);
+                            moves.add(x);
+                            break;
+                        }
+                        else {
+                            moves.add(i);
+                            moves.add(j-a);
+                            moves.add(i);
+                            moves.add(j);
+                            moves.add(x);
+                        }
+                    }
+                    a = 0;
+                    while(j + a < 7) {
+                        a++;
+                        if(board[i][j+a] != 0) {
+                            moves.add(i);
+                            moves.add(j+a);
+                            moves.add(i);
+                            moves.add(j);
+                            moves.add(x);
+                            break;
+                        }
+                        else {
+                            moves.add(i);
+                            moves.add(j+a);
+                            moves.add(i);
+                            moves.add(j);
+                            moves.add(x);
+                        }
+                    }
+                    a = 0; 
+                    while(i > a && j > a) {
+                        a++;
+                        if(board[i-a][j-a] != 0) {
+                            moves.add(i-a);
+                            moves.add(j-a);
+                            moves.add(i);
+                            moves.add(j);
+                            moves.add(x);
+                            break;
+                        }
+                        else {
+                            moves.add(i-a);
+                            moves.add(j-a);
+                            moves.add(i);
+                            moves.add(j);
+                            moves.add(x);
+                        }
+                    }
+                    a = 0;
+                    while(i + a < 7 && j > a) {
+                        a++;
+                        if(board[i+a][j-a] != 0) {
+                            moves.add(i+a);
+                            moves.add(j-a);
+                            moves.add(i);
+                            moves.add(j);
+                            moves.add(x);
+                            break;
+                        }
+                        else {
+                            moves.add(i+a);
+                            moves.add(j-a);
+                            moves.add(i);
+                            moves.add(j);
+                            moves.add(x);
+                        }
+                    }
+                    a = 0; 
+                    while(i+a < 7 && j+a < 7) {
+                        a++;
+                        if(board[i+a][j+a] != 0) {
+                            moves.add(i+a);
+                            moves.add(j+a);
+                            moves.add(i);
+                            moves.add(j);
+                            moves.add(x);
+                            break;
+                        }
+                        else  {
+                            moves.add(i+a);
+                            moves.add(j+a);
+                            moves.add(i);
+                            moves.add(j);
+                            moves.add(x);
+                        }
+                    }
+                    a = 0;
+                    while(i > a && j +a < 7) {
+                        a++;
+                        if(board[i-a][j+a] != 0) {
+                            moves.add(i-a);
+                            moves.add(j+a);
+                            moves.add(i);
+                            moves.add(j);
+                            moves.add(x);
+                            break;
+                        }
+                        else {
+                            moves.add(i-a);
+                            moves.add(j+a);
+                            moves.add(i);
+                            moves.add(j);
+                            moves.add(x);
+                        }
+                    }
+                }
+                else if(x == 3) { //rook
+                    int a = 0; 
+                    while(i > a) {
+                        a++;
+                        if(board[i-a][j] != 0) {
+                            moves.add(i-a);
+                            moves.add(j);
+                            moves.add(i);
+                            moves.add(j);
+                            moves.add(x);
+                            break;
+                        }
+                        else {
+                            moves.add(i-a);
+                            moves.add(j);
+                            moves.add(i);
+                            moves.add(j);
+                            moves.add(x);
+                        }
+                    }
+                    a = 0;
+                    while(i + a < 7) {
+                        a++;
+                        if(board[i+a][j] != 0) {
+                            moves.add(i+a);
+                            moves.add(j);
+                            moves.add(i);
+                            moves.add(j);
+                            moves.add(x);
+                            break;
+                        }
+                        else {
+                            moves.add(i+a);
+                            moves.add(j);
+                            moves.add(i);
+                            moves.add(j);
+                            moves.add(x);
+                        }
+                    }
+                    a = 0;
+                    while(j > a) {
+                        a++;
+                        if(board[i][j-a] != 0) {
+                            moves.add(i);
+                            moves.add(j-a);
+                            moves.add(i);
+                            moves.add(j);
+                            moves.add(x);
+                            break;
+                        }
+                        else {
+                            moves.add(i);
+                            moves.add(j-a);
+                            moves.add(i);
+                            moves.add(j);
+                            moves.add(x);
+                        }
+                    }
+                    a = 0;
+                    while(j + a < 7) {
+                        a++;
+                        if(board[i][j+a] != 0) {
+                            moves.add(i);
+                            moves.add(j+a);
+                            moves.add(i);
+                            moves.add(j);
+                            moves.add(x);
+                            break;
+                        }
+                        else {
+                            moves.add(i);
+                            moves.add(j+a);
+                            moves.add(i);
+                            moves.add(j);
+                            moves.add(x);
+                        }
+                    }
+                }
+                else if(x == 4) { //bishop
+                    int a = 0; 
+                    while(i > a && j > a) {
+                        a++;
+                        if(board[i-a][j-a] != 0) {
+                            moves.add(i-a);
+                            moves.add(j-a);
+                            moves.add(i);
+                            moves.add(j);
+                            moves.add(x);
+                            break;
+                        }
+                        else {
+                            moves.add(i-a);
+                            moves.add(j-a);
+                            moves.add(i);
+                            moves.add(j);
+                            moves.add(x);
+                        }
+                    }
+                    a = 0;
+                    while(i + a < 7 && j > a) {
+                        a++;
+                        if(board[i+a][j-a] != 0) {
+                            moves.add(i+a);
+                            moves.add(j-a);
+                            moves.add(i);
+                            moves.add(j);
+                            moves.add(x);
+                            break;
+                        }
+                        else {
+                            moves.add(i+a);
+                            moves.add(j-a);
+                            moves.add(i);
+                            moves.add(j);
+                            moves.add(x);
+                        }
+                    }
+                    a = 0; 
+                    while(i+a < 7 && j+a < 7) {
+                        a++;
+                        if(board[i+a][j+a] != 0) {
+                            moves.add(i+a);
+                            moves.add(j+a);
+                            moves.add(i);
+                            moves.add(j);
+                            moves.add(x);
+                            break;
+                        }
+                        else {
+                            moves.add(i+a);
+                            moves.add(j+a);
+                            moves.add(i);
+                            moves.add(j);
+                            moves.add(x);
+                        }
+                    }
+                    a = 0;
+                    while(i > a && j +a < 7) {
+                        a++;
+                        if(board[i-a][j+a] != 0) {
+                            moves.add(i-a);
+                            moves.add(j+a);
+                            moves.add(i);
+                            moves.add(j);
+                            moves.add(x);
+                            break;
+                        }
+                        else {
+                            moves.add(i-a);
+                            moves.add(j+a);
+                            moves.add(i);
+                            moves.add(j);
+                            moves.add(x);
+                        }
+                    }
+                }
+                else if(x == 5) {
+                    if(j < 6 && i != 0) {
+                        moves.add(i-1);
+                        moves.add(j+2);
+                        moves.add(i);
+                        moves.add(j);
+                        moves.add(x);
+                    }
+                    if(j < 6 && i != 7) {                        
+                        moves.add(i+1);
+                        moves.add(j+2);
+                        moves.add(i);
+                        moves.add(j);
+                        moves.add(x);
+                    }
+                    if(j > 1 && i != 0) {
+                        moves.add(i-1);
+                        moves.add(j-2);
+                        moves.add(i);
+                        moves.add(j);
+                        moves.add(x);
+                    }
+                    if(j > 1 && i != 7) {
+                        moves.add(i+1);
+                        moves.add(j-2);
+                        moves.add(i);
+                        moves.add(j);
+                        moves.add(x);
+                    }
+                    if(j != 7 && i > 1) {
+                        moves.add(i-2);
+                        moves.add(j+1);
+                        moves.add(i);
+                        moves.add(j);
+                        moves.add(x);
+                    }
+                    if(j != 7 && i < 6) {
+                        moves.add(i+2);
+                        moves.add(j+1);
+                        moves.add(i);
+                        moves.add(j);
+                        moves.add(x);
+                    }
+                    if(j != 0 && i > 1) {
+                        moves.add(i-2);
+                        moves.add(j-1);
+                        moves.add(i);
+                        moves.add(j);
+                        moves.add(x);
+                    }
+                    if(j != 0 && i < 6) {
+                        moves.add(i+2);
+                        moves.add(j-1);
+                        moves.add(i);
+                        moves.add(j);
+                        moves.add(x);
+                    }
+                }
+                else { //pawn
+                    if(player == 1) {
+                        if(board[i-1][j] == 0) {
+                        moves.add(i-1);
+                        moves.add(j);
+                        moves.add(i);
+                        moves.add(j);
+                        moves.add(x);
+                    }
+                    if(i == 6) {
+                        if(board[5][j] == 0 && board[4][j] == 0) {
+                            moves.add(4);
+                            moves.add(j);
+                            moves.add(i);
+                            moves.add(j);
+                            moves.add(x);
+                        }
+                    }
+                    if(j!= 0 && board[i-1][j-1] < 0) {
+                        moves.add(i-1);
+                        moves.add(j-1);
+                        moves.add(i);
+                        moves.add(j);
+                        moves.add(x);
+                    }
+                    if(j != 7 && board[i-1][j+1] < 0) {
+                        moves.add(i-1);
+                        moves.add(j+1);
+                        moves.add(i);
+                        moves.add(j);
+                        moves.add(x);
+                    }
+                    }
+                    else {
+                        if(board[i+1][j] == 0) {
+                            moves.add(i+1);
+                            moves.add(j);
+                            moves.add(i);
+                            moves.add(j);
+                            moves.add(x);
+                        }
+                        if(i == 1) {
+                            if(board[2][j] == 0 && board[3][j] == 0) {
+                                moves.add(3);
+                                moves.add(j);
+                                moves.add(i);
+                                moves.add(j);
+                                moves.add(x);
+                            }
+                        }
+                        if(j!= 0 && board[i+1][j-1] > 0) {
+                            moves.add(i+1);
+                            moves.add(j-1);
+                            moves.add(i);
+                            moves.add(j);
+                            moves.add(x);
+                        }
+                        if(j != 7 && board[i+1][j+1] > 0) {
+                            moves.add(i+1);
+                            moves.add(j+1);
+                            moves.add(i);
+                            moves.add(j); 
+                            moves.add(x);
+                        }
+                    }
+                }
+            }
+        }
+        return moves;
     }
 
     public static void printBoard(int[][] board) {
